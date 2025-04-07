@@ -26,3 +26,6 @@ mvnw.compiled/.mvn/
 
 # environment file
 .env
+
+# serialized schedule data
+/schedule_data.ser
