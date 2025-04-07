@@ -1,12 +1,9 @@
 package com.haru_system.bot_services;
 
-import com.haru_system.bot_services.Command;
-
 import java.util.HashMap;
 import java.util.Map;
 
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
+import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
@@ -14,15 +11,19 @@ public class CommandHandler extends ListenerAdapter {
     
     private final Map<String, Command> commands = new HashMap<>();
     private final String prefix = "!";
+    private final ScheduleService scheduleService;
 
-    public CommandHandler() {
+    public CommandHandler(JDA jda) {
+        // initialize the schedule service with the channel id
+        this.scheduleService = new ScheduleService(jda, "CHANNEL_ID");
+
         // register commands here
         registerCommand("ping", event -> {
             event.getChannel().sendMessage("Pong").queue();
         });
 
         registerCommand("web", event -> {
-            event.getChannel.sendMessage("P1 webpage: http://10.0.1.211:5000/").queue();
+            event.getChannel().sendMessage("Visit P1's webpage at: http://10.0.1.211:5000/").queue();
         });
     }
 
@@ -58,6 +59,9 @@ public class CommandHandler extends ListenerAdapter {
         if (command != null) {
             command.execute(event);
         }
+    }
 
+    public void shutdown() {
+        scheduleService.shutdown();
     }
 }

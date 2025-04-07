@@ -17,19 +17,26 @@ public class App
         Dotenv dotenv = Dotenv.load();
         String botToken = dotenv.get("BOT_TOKEN");
 
-        try {
-            // Initialize JDA and add the PingPong listener
-            JDA api = JDABuilder.createDefault(botToken)
-                .enableIntents(GatewayIntent.MESSAGE_CONTENT) // enabling the message_content
-                .build();
+        
+        // Initialize JDA
+        JDA jda = JDABuilder.createDefault(botToken)
+            .enableIntents(GatewayIntent.MESSAGE_CONTENT) // enabling the message_content
+            .build();
             
+        try {
+            jda.awaitReady();
+            CommandHandler commandHandler = new CommandHandler(jda);
             // adding listeners
-            api.addEventListener(new CommandHandler());
+            jda.addEventListener(commandHandler);
 
-            // optional block main thread until bot is ready?
-            api.awaitReady();
-        } catch (Exception e) {
-            System.out.println("Exception trying to build and run bot\nException: " + e.getMessage());
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                commandHandler.shutdown();
+                jda.shutdown();
+            }));
+            
+        } catch (InterruptedException e) {
+            System.out.println("Exception trying to build and run bot\nException: ");
+            e.printStackTrace();
         }
     }
 
