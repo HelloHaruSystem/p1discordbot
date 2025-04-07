@@ -1,6 +1,6 @@
 package com.haru_system.p1bot;
 
-import com.haru_system.bot_services.CommandHandler;
+import com.haru_system.p1bot.bot_services.CommandHandler;
 
 import io.github.cdimascio.dotenv.Dotenv;
 import net.dv8tion.jda.api.JDA;

@@ -1,4 +1,4 @@
-package com.haru_system.bot_services;
+package com.haru_system.p1bot.bot_services;
 
 import java.awt.Color;
 import java.util.List;
