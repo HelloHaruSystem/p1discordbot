@@ -1,0 +1,28 @@
+# maven build directory
+/target/
+/.idea/
+/.vscode/
+
+# compiled files
+*.class
+
+# user specific files and IDE files
+.vscode/
+.idea/
+*.iml
+*.iws
+*.ipr
+.project
+.classpath
+.settings/
+
+# ignore maven wrapper files if used
+mvnw
+mvnw.compiled/.mvn/
+
+# Ignore build files that could contain sensitive information
+/target/*
+!/target/*.jar
+
+# environment file
+.env
