@@ -1,6 +1,6 @@
 package com.haru_system.p1bot;
 
-import com.haru_system.bot_services.PingPong;
+import com.haru_system.bot_services.CommandHandler;
 
 import io.github.cdimascio.dotenv.Dotenv;
 import net.dv8tion.jda.api.JDA;
@@ -24,7 +24,7 @@ public class App
                 .build();
             
             // adding listeners
-            api.addEventListener(new PingPong());
+            api.addEventListener(new CommandHandler());
 
             // optional block main thread until bot is ready?
             api.awaitReady();
