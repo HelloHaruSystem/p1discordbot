@@ -16,7 +16,7 @@ public class App
         // bot token and channel id
         Dotenv dotenv = Dotenv.load();
         String botToken = dotenv.get("BOT_TOKEN");
-        String channelId = dotenv.get("DISCORD_TEST_CHANNEL");
+        String channelId = dotenv.get("P1_GENERAL_CHANEL");
 
         // Initialize JDA
         JDA jda = JDABuilder.createDefault(botToken)

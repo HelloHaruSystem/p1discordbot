@@ -73,7 +73,7 @@ public class ScheduleCommand {
 
         if (scheduleService.addScheduleItem(dayIndex, time, description.toString().trim())) {
             EmbedBuilder embed = new EmbedBuilder()
-                .setTitle("#✅ Event added the schedule")
+                .setTitle("✅ Event added the schedule")
                 .setColor(Color.GREEN)
                 .setDescription("Added to " + day + " at " + time + ":\n" + description.toString().trim());
 
@@ -110,7 +110,7 @@ public class ScheduleCommand {
 
             if (scheduleService.removeScheduleItem(dayIndex, itemIndex)) {
                 EmbedBuilder embed = new EmbedBuilder()
-                    .setTitle("#✅ Event Removed!")
+                    .setTitle("✅ Event Removed!")
                     .setColor(Color.RED)
                     .setDescription("Removed from " + day + ":\n" + removedItem.getTime() + " - " + removedItem.getDescription());
                 
@@ -132,7 +132,7 @@ public class ScheduleCommand {
 
         if (args[1].equalsIgnoreCase("all")) {
             scheduleService.clearAllSchedules();
-            event.getChannel().sendMessage("#✅ Cleared the entire weekly schedule.").queue();
+            event.getChannel().sendMessage("✅ Cleared the entire weekly schedule.").queue();
             return;
         }
 
@@ -143,7 +143,7 @@ public class ScheduleCommand {
         }
 
         scheduleService.clearDay(dayIndex);
-        event.getChannel().sendMessage("#✅ Cleared akk events for " + args[1] + ".").queue();
+        event.getChannel().sendMessage("✅ Cleared akk events for " + args[1] + ".").queue();
     }
 
     private void sendHelpEmbed(MessageReceivedEvent event) {

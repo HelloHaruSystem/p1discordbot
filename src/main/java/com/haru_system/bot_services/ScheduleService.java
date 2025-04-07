@@ -5,8 +5,10 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -91,13 +93,13 @@ public class ScheduleService {
 
     // get today's schedule as an Embed
     public EmbedBuilder createDailyScheduleEmbed() {
-        int dayOfWeek = LocalDateTime.now().getDayOfWeek().getValue() % 5;
+        int dayOfWeek = LocalDateTime.now().getDayOfWeek().getValue() - 1;
         String dayName = getDayName(dayOfWeek);
 
         EmbedBuilder embed = new EmbedBuilder();
-        embed.setTitle("#📅 Schedule for " + dayName);
+        embed.setTitle("📅 Schedule for " + dayName);
         embed.setColor(Color.PINK);
-        embed.setDescription("#🔥 Good Morning! Here's what's planned for today: 🔥");
+        embed.setDescription("🔥 Good Morning! Here's what's planned for today: "+ formattedDate() + "🔥");
 
         List<ScheduleItem> todaysItems = weeklySchedule.get(dayOfWeek);
 
@@ -122,7 +124,7 @@ public class ScheduleService {
     // get this weeks schedule as an Embed
     public EmbedBuilder createWeeklyScheduleEmbed() {
         EmbedBuilder embed = new EmbedBuilder();
-        embed.setTitle("#📅 Schedule for this week!");
+        embed.setTitle("📅 Schedule for this week!");
         embed.setColor(Color.GREEN);
 
         for (int i = 0; i < 5; i++) {
@@ -213,6 +215,14 @@ public class ScheduleService {
             return new ArrayList<>(weeklySchedule.get(dayOfWeek));
         }
         return new ArrayList<>();
+    }
+
+    // get today in dd/mm/yyyy format
+    private String formattedDate() {
+        LocalDate today = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/mm/yyyy");
+        
+        return today.format(formatter);
     }
 
     public void shutdown() {
