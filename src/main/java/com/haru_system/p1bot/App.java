@@ -5,6 +5,7 @@ import com.haru_system.bot_services.PingPong;
 import io.github.cdimascio.dotenv.Dotenv;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.requests.GatewayIntent;
 
 public class App 
 {
@@ -18,7 +19,11 @@ public class App
 
         try {
             // Initialize JDA and add the PingPong listener
-            JDA api = JDABuilder.createDefault(botToken).build();
+            JDA api = JDABuilder.createDefault(botToken)
+                .enableIntents(GatewayIntent.MESSAGE_CONTENT) // enabling the message_content
+                .build();
+            
+            // adding listeners
             api.addEventListener(new PingPong());
 
             // optional block main thread until bot is ready?
