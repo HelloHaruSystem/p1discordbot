@@ -1,6 +1,7 @@
 package com.haru_system.bot_services;
 
 import java.awt.Color;
+import java.util.List;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -75,7 +76,7 @@ public class ScheduleCommand {
 
         if (scheduleService.addScheduleItem(dayIndex, time, description.toString().trim())) {
             EmbedBuilder embed = new EmbedBuilder()
-                .setTitle("✅ Event added the schedule")
+                .setTitle("#✅ Event added the schedule")
                 .setColor(Color.GREEN)
                 .setDescription("Added to " + day + " at " + time + ":\n" + description.toString().trim());
 
@@ -84,4 +85,46 @@ public class ScheduleCommand {
             event.getChannel().sendMessage("❌ Failed to add event to the schedule. Please check your the format is correct.");
         }
     }
+
+    public void handleRemoveCommand(MessageReceivedEvent event, String[] args) {
+        // in case of missing arguments
+        if (args.length < 3) {
+            event.getChannel().sendMessage("❌ Not enough arguments. Use: `!schedule remove [day] [index]`").queue();
+            return;
+        }
+
+        String day = args[1];
+        int dayIndex = scheduleService.getDayIndex(day);
+        if (dayIndex == -1) {
+            event.getChannel().sendMessage("❌ Invalid day. Please use full day names (monday, tuesday, wednesday...).").queue();
+            return;
+        }
+
+        try {
+            int itemIndex = Integer.parseInt(args[2]) - 1; // for 0 indexing :)
+
+            List<ScheduleItem> dayItems = scheduleService.getDaySchedule(dayIndex);
+            if (itemIndex < 0 || itemIndex >= dayItems.size()) {
+                event.getChannel().sendMessage("❌ Invalid index. Please use `!schedule " + day + "` to see available items.").queue();
+                return;
+            }
+
+            ScheduleItem removedItem = dayItems.get(itemIndex);
+
+            if (scheduleService.removeScheduleItem(dayIndex, itemIndex)) {
+                EmbedBuilder embed = new EmbedBuilder()
+                    .setTitle("#✅ Event Removed!")
+                    .setColor(Color.RED)
+                    .setDescription("Removed from " + day + ":\n" + removedItem.getTime() + " - " + removedItem.getDescription());
+                
+                event.getChannel().sendMessageEmbeds(embed.build()).queue();
+            } else {
+                event.getChannel().sendMessage("❌ Failed to remove event. Please check index.").queue();
+            }
+        } catch (NumberFormatException e) {
+            event.getChannel().sendMessage("❌ Invalid index number. Please use a number.").queue();
+        }
+    }
+
+
 }
