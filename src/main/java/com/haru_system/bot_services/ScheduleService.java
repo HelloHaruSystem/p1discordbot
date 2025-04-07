@@ -1,5 +1,10 @@
 package com.haru_system.bot_services;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -9,8 +14,6 @@ import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-
-import com.haru_system.ScheduleItem;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
@@ -31,7 +34,7 @@ public class ScheduleService {
         this.channelId = channelId;
 
         // try to load existing schedule from file or create new empty one
-        Map<Integer, List<ScheduleItem>> loadedSchedule = loadedScheduleFromFile();
+        Map<Integer, List<ScheduleItem>> loadedSchedule = loadScheduleFromFile();
         if (loadedSchedule != null) {
             this.weeklySchedule = loadedSchedule;
         } else {
@@ -43,6 +46,27 @@ public class ScheduleService {
         }
 
         setupDailyScheduleAnnouncement();
+    }
+
+    // handle warning properly
+    @SuppressWarnings("unchecked")
+    private Map<Integer, List<ScheduleItem>> loadScheduleFromFile() {
+        try (ObjectInputStream objInStream = new ObjectInputStream(new FileInputStream(scheduleFilePath))) {
+            return (Map<Integer, List<ScheduleItem>>) objInStream.readObject();
+        } catch (Exception e) {
+            System.out.println("could not load schedule from file: ");
+            e.getStackTrace();
+            return null;
+        }
+    }
+
+    private void saveScheduleToFile() {
+        try (ObjectOutputStream objOutStream = new ObjectOutputStream(new FileOutputStream(scheduleFilePath))) {
+            objOutStream.writeObject(weeklySchedule);
+        } catch (Exception e) {
+            System.out.println("Could not save schedule to file: ");
+            e.getStackTrace();
+        }
     }
 
     private void setupDailyScheduleAnnouncement() {
