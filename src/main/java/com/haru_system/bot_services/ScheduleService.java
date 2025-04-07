@@ -219,10 +219,11 @@ public class ScheduleService {
 
     // get today in dd/mm/yyyy format
     private String formattedDate() {
-        LocalDate today = LocalDate.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/mm/yyyy");
+        LocalDateTime dateTime = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+        String formatted = dateTime.format(formatter); 
         
-        return today.format(formatter);
+        return formatted;
     }
 
     public void shutdown() {
