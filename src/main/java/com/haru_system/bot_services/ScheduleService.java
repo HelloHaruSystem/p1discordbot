@@ -84,9 +84,7 @@ public class ScheduleService {
         scheduler.scheduleAtFixedRate(() -> {
             TextChannel channel = jda.getTextChannelById(channelId);
             if (channel != null) {
-                String todaysSchedule = generateSchedule();
-                //TODO: make the sendMessageEmbeds here
-                channel.sendMessage("#Good morning! Here's todays schedule:\n" + todaysSchedule);
+                channel.sendMessageEmbeds(createDailyScheduleEmbed().build()).queue();
             }
         }, initialDelay, TimeUnit.DAYS.toSeconds(1), TimeUnit.SECONDS);        
     }
@@ -94,7 +92,7 @@ public class ScheduleService {
     // get today's schedule as an Embed
     public EmbedBuilder createDailyScheduleEmbed() {
         int dayOfWeek = LocalDateTime.now().getDayOfWeek().getValue() % 5;
-        string dayName = getDayName(dayOfWeek);
+        String dayName = getDayName(dayOfWeek);
 
         EmbedBuilder embed = new EmbedBuilder();
         embed.setTitle("#📅 Schedule for " + dayName);
@@ -175,38 +173,46 @@ public class ScheduleService {
         return true;
     }
 
-    public String generateSchedule() {
-        String[] days = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday"};
-        int dayOfWeek = LocalDateTime.now().getDayOfWeek().getValue() % 5;
-
-        StringBuilder schedule = new StringBuilder();
-
-        switch (dayOfWeek) {
-            case 1:
-                schedule.append("08:00 - Daily Stand-up");
-                schedule.append("12:00 - Website");
-                break;
-            case 2:
-                schedule.append("08:00 - Daily Stand-up");
-                schedule.append("12:00 - personal project");
-                break;
-            case 3:
-                schedule.append("08:00 - Daily Stand-up");
-                schedule.append("10:30 - activity");
-                break;
-            case 4:
-                schedule.append("08:00 - Daily Stand-up");
-                schedule.append("12:00 - ???");
-                break;
-            case 5:
-                schedule.append("08:00 - Daily Stand-up");
-                schedule.append("12:00 - retro");
-                break;
-            default:
-                schedule.append("No schedule today");
+    // clear all items for a specific day of the week
+    public void clearDay(int dayOfWeek) {
+        if (dayOfWeek >= 0 && dayOfWeek <= 5) {
+            weeklySchedule.get(dayOfWeek).clear();
+            saveScheduleToFile();
         }
-        
-        return schedule.toString();
+    }
+
+    // clear the whole schedule
+    public void clearAllSchedules() {
+        for (int i = 0; i < 5; i++) {
+            weeklySchedule.get(i).clear();
+        }
+        saveScheduleToFile();
+    }
+
+    // get the day name of the week by number (monday=0, 1=tuesday and so on)
+    private String getDayName(int day) {
+        String[] days = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday"};
+        return days[day];
+    }
+
+    // get day index from name
+    public int getDayIndex(String dayName) {
+        switch (dayName.toLowerCase()) {
+            case "monday": case "mon": return 0;
+            case "tuesday": case "tue": return 1;
+            case "wednesday": case "wed": return 2;
+            case "thursday": case "thu": return 3;
+            case "friday": case "fri": return 4;
+            default: return -1;
+        }
+    }
+
+    // get a specific fay's schedule items
+    public List<ScheduleItem> getDaySchedule(int dayOfWeek) {
+        if (dayOfWeek >= 0 && dayOfWeek <= 6) {
+            return new ArrayList<>(weeklySchedule.get(dayOfWeek));
+        }
+        return new ArrayList<>();
     }
 
     public void shutdown() {
