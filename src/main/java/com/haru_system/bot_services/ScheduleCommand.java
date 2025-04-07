@@ -43,17 +43,14 @@ public class ScheduleCommand {
                 break;
 
             case "help":
-                handleHelpCommand(event, args);
-                break;
-
             default:
-                sendHelpEmbed(event);
+                sendHelpEmbed(event);(event);
                 break;
         }
     }
 
     private void handleAddCommand(MessageReceivedEvent event, String[] args) {
-        // in case of missing arguments
+        // incase of missing arguments
         if (args.length < 4) {
             event.getChannel().sendMessage("❌ Not enough arguments. Use: `!schedule add [day] [time] [description]`").queue();
             return;
@@ -87,7 +84,7 @@ public class ScheduleCommand {
     }
 
     public void handleRemoveCommand(MessageReceivedEvent event, String[] args) {
-        // in case of missing arguments
+        // incase of missing arguments
         if (args.length < 3) {
             event.getChannel().sendMessage("❌ Not enough arguments. Use: `!schedule remove [day] [index]`").queue();
             return;
@@ -126,5 +123,41 @@ public class ScheduleCommand {
         }
     }
 
+    private void handleClearCommand(MessageReceivedEvent event, String[] args) {
+        // incase of invalid arguments
+        if (args.length < 2) {
+            event.getChannel().sendMessage("❌ Please specify what to clear: `!schedule clear [day/all]`").queue();
+            return;
+        }
 
+        if (args[1].equalsIgnoreCase("all")) {
+            scheduleService.clearAllSchedules();
+            event.getChannel().sendMessage("#✅ Cleared the entire weekly schedule.").queue();
+            return;
+        }
+
+        int dayIndex = scheduleService.getDayIndex(args[1]);
+        if (dayIndex == -1) {
+            event.getChannel().sendMessage("❌ Invalid day. Please use full day names (monday, tuesday, wednesday...).").queue();
+            return;
+        }
+
+        scheduleService.clearDay(dayIndex);
+        event.getChannel().sendMessage("#✅ Cleared akk events for " + args[1] + ".").queue();
+    }
+
+    private void sendHelpEmbed(MessageReceivedEvent event) {
+        EmbedBuilder embed = new EmbedBuilder()
+            .setTitle("📅 Schedule Command Help")
+            .setColor(Color.BLUE)
+            .setDescription("Available schedule commands:")
+            .addField("!schedule", "Shows today's schedule" ,false)
+            .addField("!schedule today", "Shows today's schedule as well :)", false)
+            .addField("!schedule week", "Shows the entire week's schedule", false)
+            .addField("!schedule add [day] [time] [description]", "Adds an event to the schedule\nExample: `schedule add monday 15:00 Team Meeting`", false)
+            .addField("!schedule remove [day] [index]", "Removes an event by its index\nExample: `!schedule remove monday 1`", false)
+            .addField("!schedule clear [day/all]", "Clears all events for a day or the entire week\nExample: `!schedule clear friday`", false);
+
+        event.getChannel().sendMessageEmbeds(embed.build()).queue();
+    }
 }
