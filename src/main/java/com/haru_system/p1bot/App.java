@@ -13,11 +13,11 @@ public class App
         // makes sure the app is starting
         System.out.println(helloWorld());
 
-        // bot token
+        // bot token and channel id
         Dotenv dotenv = Dotenv.load();
         String botToken = dotenv.get("BOT_TOKEN");
+        String channelId = dotenv.get("DISCORD_TEST_CHANNEL");
 
-        
         // Initialize JDA
         JDA jda = JDABuilder.createDefault(botToken)
             .enableIntents(GatewayIntent.MESSAGE_CONTENT) // enabling the message_content
@@ -25,7 +25,7 @@ public class App
             
         try {
             jda.awaitReady();
-            CommandHandler commandHandler = new CommandHandler(jda);
+            CommandHandler commandHandler = new CommandHandler(jda, channelId);
             // adding listeners
             jda.addEventListener(commandHandler);
 

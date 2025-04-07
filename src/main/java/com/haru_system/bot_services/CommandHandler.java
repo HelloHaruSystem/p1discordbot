@@ -12,10 +12,13 @@ public class CommandHandler extends ListenerAdapter {
     private final Map<String, Command> commands = new HashMap<>();
     private final String prefix = "!";
     private final ScheduleService scheduleService;
+    private final ScheduleCommand scheduleCommand;
 
-    public CommandHandler(JDA jda) {
+    public CommandHandler(JDA jda, String channelId) {
+
         // initialize the schedule service with the channel id
-        this.scheduleService = new ScheduleService(jda, "CHANNEL_ID");
+        this.scheduleService = new ScheduleService(jda, channelId);
+        this.scheduleCommand = new ScheduleCommand(scheduleService);
 
         // register commands here
         registerCommand("ping", event -> {
@@ -25,6 +28,17 @@ public class CommandHandler extends ListenerAdapter {
         registerCommand("web", event -> {
             event.getChannel().sendMessage("Visit P1's webpage at: http://10.0.1.211:5000/").queue();
         });
+
+        registerCommand("schedule", event -> {
+            // Parse arguments
+            String[] args = event.getMessage().getContentRaw()
+                .substring(prefix.length() + "schedule".length()).trim().split("\\s+");
+            
+            // handle the schedule commands
+            scheduleCommand.handleCommand(event, args);
+        });
+
+        // more commands goes here
     }
 
     public void registerCommand(String name, Command command) {
