@@ -147,6 +147,34 @@ public class ScheduleService {
         return embed;
     }
 
+    // add item to schedule
+    public boolean addScheduleItem(int dayOfWeek, String time, String description) {
+        if (dayOfWeek < 0 || dayOfWeek > 5) {
+            return false;
+        }
+
+        ScheduleItem newItem = new ScheduleItem(time, description);
+        weeklySchedule.get(dayOfWeek).add(newItem);
+        saveScheduleToFile();
+        return true;
+    }
+
+    // remove item from schedule by index
+    public boolean removeScheduleItem(int dayOfWeek, int index) {
+        if (dayOfWeek < 0 || dayOfWeek > 5) {
+            return false;
+        }
+
+        List<ScheduleItem> dayItems = weeklySchedule.get(dayOfWeek);
+        if (index < 0 || index >= dayItems.size()) {
+            return false;
+        }
+
+        dayItems.remove(index);
+        saveScheduleToFile();
+        return true;
+    }
+
     public String generateSchedule() {
         String[] days = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday"};
         int dayOfWeek = LocalDateTime.now().getDayOfWeek().getValue() % 5;
