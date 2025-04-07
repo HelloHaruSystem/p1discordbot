@@ -1,9 +1,9 @@
 package com.haru_system.bot_services;
 
+import java.awt.Color;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -15,6 +15,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 
@@ -84,9 +85,66 @@ public class ScheduleService {
             TextChannel channel = jda.getTextChannelById(channelId);
             if (channel != null) {
                 String todaysSchedule = generateSchedule();
+                //TODO: make the sendMessageEmbeds here
                 channel.sendMessage("#Good morning! Here's todays schedule:\n" + todaysSchedule);
             }
         }, initialDelay, TimeUnit.DAYS.toSeconds(1), TimeUnit.SECONDS);        
+    }
+
+    // get today's schedule as an Embed
+    public EmbedBuilder createDailyScheduleEmbed() {
+        int dayOfWeek = LocalDateTime.now().getDayOfWeek().getValue() % 5;
+        string dayName = getDayName(dayOfWeek);
+
+        EmbedBuilder embed = new EmbedBuilder();
+        embed.setTitle("#📅 Schedule for " + dayName);
+        embed.setColor(Color.PINK);
+        embed.setDescription("#🔥 Good Morning! Here's what's planned for today: 🔥");
+
+        List<ScheduleItem> todaysItems = weeklySchedule.get(dayOfWeek);
+
+        if (todaysItems.isEmpty()) {
+            embed.addField("No Events", "Nothing scheduled for today. :(", false);
+        } else {
+            todaysItems.sort((a, b) -> a.getTime().compareTo(b.getTime()));
+            
+            for (ScheduleItem item : todaysItems) {
+                embed.addField(
+                    item.getTime(),
+                    item.getDescription(),
+                    false
+                );
+            }
+        }
+
+        embed.setFooter("Use !schedule help for more commands! :)");
+        return embed;
+    }
+
+    // get this weeks schedule as an Embed
+    public EmbedBuilder createWeeklyScheduleEmbed() {
+        EmbedBuilder embed = new EmbedBuilder();
+        embed.setTitle("#📅 Schedule for this week!");
+        embed.setColor(Color.GREEN);
+
+        for (int i = 0; i < 5; i++) {
+            List<ScheduleItem> dayITems = weeklySchedule.get(i);
+            StringBuilder sb = new StringBuilder();
+
+            if (dayITems.isEmpty()) {
+                sb.append("No events scheduled.\n");
+            } else {
+                dayITems.sort((a, b) -> a.getTime().compareTo(b.getTime()));
+                for (ScheduleItem item : dayITems) {
+                    sb.append("`").append(item.getTime()).append("` - ");
+                    sb.append(item.getDescription()).append("\n");
+                }
+            }
+
+            embed.addField(getDayName(i), sb.toString(), false);
+        }
+
+        return embed;
     }
 
     public String generateSchedule() {
