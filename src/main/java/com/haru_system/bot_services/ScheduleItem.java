@@ -1,8 +1,9 @@
-package com.haru_system;
+package com.haru_system.bot_services;
 
 import java.io.Serializable;
 
 public class ScheduleItem implements Serializable {
+    @SuppressWarnings("unused")
     private static final Long serialVersionUID = 1L;
 
     private final String time;

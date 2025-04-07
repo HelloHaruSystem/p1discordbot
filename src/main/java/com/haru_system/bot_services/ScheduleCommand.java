@@ -44,7 +44,7 @@ public class ScheduleCommand {
 
             case "help":
             default:
-                sendHelpEmbed(event);(event);
+                sendHelpEmbed(event);
                 break;
         }
     }
