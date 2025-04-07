@@ -2,9 +2,15 @@ package com.haru_system.bot_services;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+
+import com.haru_system.ScheduleItem;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
@@ -14,10 +20,28 @@ public class ScheduleService {
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     private final JDA jda;
     private final String channelId;
+    // Map for storing schedules for each day
+    private final Map<Integer, List<ScheduleItem>> weeklySchedule;
+    // file to store schedule data
+    private final String scheduleFilePath = "schedule_data.ser";
 
+    // constructor
     public ScheduleService(JDA jda, String channelId) {
         this.jda = jda;
         this.channelId = channelId;
+
+        // try to load existing schedule from file or create new empty one
+        Map<Integer, List<ScheduleItem>> loadedSchedule = loadedScheduleFromFile();
+        if (loadedSchedule != null) {
+            this.weeklySchedule = loadedSchedule;
+        } else {
+            this.weeklySchedule = new HashMap<>();
+            // initialize empty schedule for each day
+            for (int i = 0; i < 5; i++) {
+                weeklySchedule.put(i, new ArrayList<>());
+            }
+        }
+
         setupDailyScheduleAnnouncement();
     }
 
@@ -51,6 +75,22 @@ public class ScheduleService {
             case 1:
                 schedule.append("08:00 - Daily Stand-up");
                 schedule.append("12:00 - Website");
+                break;
+            case 2:
+                schedule.append("08:00 - Daily Stand-up");
+                schedule.append("12:00 - personal project");
+                break;
+            case 3:
+                schedule.append("08:00 - Daily Stand-up");
+                schedule.append("10:30 - activity");
+                break;
+            case 4:
+                schedule.append("08:00 - Daily Stand-up");
+                schedule.append("12:00 - ???");
+                break;
+            case 5:
+                schedule.append("08:00 - Daily Stand-up");
+                schedule.append("12:00 - retro");
                 break;
             default:
                 schedule.append("No schedule today");
