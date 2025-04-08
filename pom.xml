@@ -11,6 +11,11 @@
   <name>p1bot</name>
   <url>http://maven.apache.org</url>
 
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
@@ -36,15 +41,15 @@
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
-      <version>2.0.0-alpha1</version>
+      <version>1.7.36</version>
     </dependency>
-    <dependency>  
+    <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
       <version>1.2.10</version>
     </dependency>
-
   </dependencies>
+
 
   <build>
     <plugins>
@@ -56,6 +61,12 @@
             <configuration>
                 <release>21</release>
             </configuration>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-resources-plugin</artifactId>
+          <version>3.3.1</version> <!-- latest as of now -->
         </plugin>
 
         <!-- Surefire Plugin for running tests -->
