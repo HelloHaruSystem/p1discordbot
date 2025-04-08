@@ -1,11 +1,14 @@
 package com.haru_system.p1bot.bot_services;
 
+import java.awt.Color;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.haru_system.p1bot.bot_services.Joke.JokeRepo;
 import com.haru_system.p1bot.bot_services.Schedule.ScheduleCommand;
 import com.haru_system.p1bot.bot_services.Schedule.ScheduleService;
 
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -39,6 +42,17 @@ public class CommandHandler extends ListenerAdapter {
             
             // handle the schedule commands
             scheduleCommand.handleCommand(event, args);
+        });
+
+        registerCommand("joke", event -> {
+            // get joke
+            String joke = JokeRepo.getJoke();
+            EmbedBuilder embed = new EmbedBuilder()
+                .setTitle("🤭 Here's is a joke 🤭")
+                .setColor(Color.MAGENTA)
+                .setDescription(joke);
+
+            event.getChannel().sendMessageEmbeds(embed.build()).queue();
         });
 
         // more commands goes here
