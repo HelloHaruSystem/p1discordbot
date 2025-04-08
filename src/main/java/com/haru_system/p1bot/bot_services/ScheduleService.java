@@ -57,7 +57,7 @@ public class ScheduleService {
             return (Map<Integer, List<ScheduleItem>>) objInStream.readObject();
         } catch (Exception e) {
             System.out.println("could not load schedule from file: ");
-            e.getStackTrace();
+            e.printStackTrace();
             return null;
         }
     }
@@ -67,7 +67,7 @@ public class ScheduleService {
             objOutStream.writeObject(weeklySchedule);
         } catch (Exception e) {
             System.out.println("Could not save schedule to file: ");
-            e.getStackTrace();
+            e.printStackTrace();
         }
     }
 

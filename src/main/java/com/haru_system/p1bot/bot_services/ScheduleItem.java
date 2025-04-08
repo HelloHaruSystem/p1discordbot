@@ -3,7 +3,6 @@ package com.haru_system.p1bot.bot_services;
 import java.io.Serializable;
 
 public class ScheduleItem implements Serializable {
-    @SuppressWarnings("unused")
     private static final Long serialVersionUID = 1L;
 
     private final String time;
