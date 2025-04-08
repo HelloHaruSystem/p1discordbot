@@ -48,7 +48,7 @@ public class CommandHandler extends ListenerAdapter {
             // get joke
             String joke = JokeRepo.getJoke();
             EmbedBuilder embed = new EmbedBuilder()
-                .setTitle("🤭 Here's is a joke 🤭")
+                .setTitle("🤭 Here is a joke 🤭")
                 .setColor(Color.MAGENTA)
                 .setDescription(joke);
 
