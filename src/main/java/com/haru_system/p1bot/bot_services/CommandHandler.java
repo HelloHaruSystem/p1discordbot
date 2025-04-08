@@ -28,11 +28,20 @@ public class CommandHandler extends ListenerAdapter {
 
         // register commands here
         registerCommand("ping", event -> {
-            event.getChannel().sendMessage("Pong").queue();
+            EmbedBuilder embed = new EmbedBuilder()
+                .setDescription("Pong")
+                .setColor(Color.YELLOW);
+
+            event.getChannel().sendMessageEmbeds(embed.build()).queue();
         });
 
         registerCommand("web", event -> {
-            event.getChannel().sendMessage("Visit P1's webpage at: http://10.0.1.211:5000/").queue();
+            EmbedBuilder embed = new EmbedBuilder()
+                .setTitle("P1's Homepage 🚀")
+                .setDescription("visit at http://10.0.1.211:5000/")
+                .setColor(Color.orange);
+
+            event.getChannel().sendMessageEmbeds(embed.build()).queue();
         });
 
         registerCommand("schedule", event -> {
