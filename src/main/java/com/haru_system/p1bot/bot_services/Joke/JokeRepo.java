@@ -6,7 +6,6 @@ import com.simtechdata.jokes.enums.Flag;
 import com.simtechdata.jokes.enums.Format;
 import com.simtechdata.jokes.enums.Language;
 import com.simtechdata.jokes.enums.Type;
-import com.simtechdata.jokes.joke.Joke;
 
 public class JokeRepo {
     
