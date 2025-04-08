@@ -1,4 +1,4 @@
-package com.haru_system.p1bot.bot_services;
+package com.haru_system.p1bot.bot_services.Schedule;
 
 import java.awt.Color;
 import java.util.List;
@@ -143,7 +143,7 @@ public class ScheduleCommand {
         }
 
         scheduleService.clearDay(dayIndex);
-        event.getChannel().sendMessage("✅ Cleared akk events for " + args[1] + ".").queue();
+        event.getChannel().sendMessage("✅ Cleared all events for " + args[1] + ".").queue();
     }
 
     private void sendHelpEmbed(MessageReceivedEvent event) {

@@ -3,6 +3,9 @@ package com.haru_system.p1bot.bot_services;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.haru_system.p1bot.bot_services.Schedule.ScheduleCommand;
+import com.haru_system.p1bot.bot_services.Schedule.ScheduleService;
+
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;

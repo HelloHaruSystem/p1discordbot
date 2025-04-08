@@ -7,8 +7,7 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 
-public class App 
-{
+public class App {
     public static void main(String[] args) {
         // makes sure the app is starting
         System.out.println(helloWorld());
