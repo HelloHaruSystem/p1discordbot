@@ -9,6 +9,8 @@ import com.simtechdata.jokes.enums.Type;
 
 public class JokeRepo {
     
+    // calling https://jokeapi.dev/ for jokoes
+    // remember to set filters with addBlackList()
     public static String getJoke() {
         Jokes jokes = new Jokes.Builder()
         .addCategory(Category.PUN, Category.PROGRAMMING, Category.MISC)
