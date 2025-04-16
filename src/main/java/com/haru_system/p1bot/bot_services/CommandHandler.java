@@ -35,6 +35,14 @@ public class CommandHandler extends ListenerAdapter {
             event.getChannel().sendMessageEmbeds(embed.build()).queue();
         });
 
+        registerCommand("pong", event -> {
+            EmbedBuilder embed = new EmbedBuilder()
+                .setDescription("Ping")
+                .setColor(Color.YELLOW);
+            
+            event.getChannel().sendMessageEmbeds(embed.build()).queue();
+        });
+
         registerCommand("web", event -> {
             EmbedBuilder embed = new EmbedBuilder()
                 .setTitle("P1's Homepage 🚀")
@@ -64,7 +72,6 @@ public class CommandHandler extends ListenerAdapter {
             event.getChannel().sendMessageEmbeds(embed.build()).queue();
         });
 
-        // more commands goes here
     }
 
     public void registerCommand(String name, Command command) {
