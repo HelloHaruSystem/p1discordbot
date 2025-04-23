@@ -10,6 +10,8 @@ import com.simtechdata.jokes.enums.Type;
 // using https://sv443.net/jokeapi/v2/ 
 public class JokeRepo {
     
+    // calling https://jokeapi.dev/ for jokoes
+    // remember to set filters with addBlackList()
     public static String getJoke() {
         Jokes jokes = new Jokes.Builder()
         //  can add back Category.PUN and Category.MISC later if needed
