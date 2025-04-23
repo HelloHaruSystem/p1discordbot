@@ -7,11 +7,13 @@ import com.simtechdata.jokes.enums.Format;
 import com.simtechdata.jokes.enums.Language;
 import com.simtechdata.jokes.enums.Type;
 
+// using https://sv443.net/jokeapi/v2/ 
 public class JokeRepo {
     
     public static String getJoke() {
         Jokes jokes = new Jokes.Builder()
-        .addCategory(Category.PUN, Category.PROGRAMMING, Category.MISC)
+        //  can add back Category.PUN and Category.MISC later if needed
+        .addCategory(Category.PROGRAMMING)
         .setLanguage(Language.ENGLISH)
         .addBlackList(Flag.EXPLICIT, Flag.NSFW, Flag.SEXIST, Flag.RELIGIOUS, Flag.RACIST)
         .setFormat(Format.JSON)
